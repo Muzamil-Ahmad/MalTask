@@ -91,12 +91,12 @@ module.exports = {
           response.send(500, err);
         }
         else {
-          let users = [];
+          let sales = [];
           if (res.rows.length > 0) {
             console.log(res);
-            users = res.rows;
+            sales = res.rows;
           }
-          response.send(200, users);
+          response.send(200, sales);
         }
   
       }, client);
