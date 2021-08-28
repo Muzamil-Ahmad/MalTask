@@ -1,24 +1,21 @@
 const { getClient, query, queryParams } = require("../db");
-function toTimestamp(strDate){
-  var datum = Date.parse(strDate);
-  return datum/1000;
-}
 
 module.exports = {
   newSale: (request, response) => {
-    if (request) {
+    if (request.body) {
       const sale = {
         userName: request.body.username,
-        amount: request.body.amount
+        amount: request.body.amount,
+        date: request.body.date
       };
   
       getClient((errClient, client) => {
         if (errClient) {
           response.send(503, errClient);
         }
-        let currentDate=new Date().toISOString()
-        console.log("crueent",currentDate)
-        queryParams("INSERT INTO sales (userName,amount,created_at) VALUES ($1, $2,$3);", [sale.userName,sale.amount,currentDate], (err) => {
+        // let currentDate=new Date().toISOString()
+        // console.log("crueent",currentDate)
+        queryParams("INSERT INTO sales (userName,amount,created_at) VALUES ($1, $2,$3);", [sale.userName,sale.amount,sale.date], (err) => {
           // queryParams("INSERT INTO sales (userName,amount,created_at) VALUES ($1, $2,$3);", (err) => {
           client.end();
           let created = true;
@@ -81,7 +78,7 @@ module.exports = {
       if(request.params.params==="daily")
          query = "select extract(hour from created_at) as Hour,sum(amount) from sales group by extract(hour from created_at)"
       else if(request.params.params==="weekly")
-         query = "select extract(day from created_at) as day,sum(amount) from sales group by extract(day from created_at)"
+         query = "select extract(week from created_at) as Week,sum(amount) from sales group by extract(week from created_at)"
       else if(request.params.params==="monthly")
          query = "select extract(day from created_at) as day,sum(amount) from sales group by extract(day from created_at)"
 
