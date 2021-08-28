@@ -8,6 +8,7 @@ Step 2: Install the packages
  
  
  Step3: Import the database in postgresql
+    filename:-msales.sql
  
  
  Step 4: Use the postman collection to test API.
